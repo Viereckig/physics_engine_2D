@@ -20,17 +20,22 @@ public class Move {
 
 
         for(Obstacle obstacle : obstacles){
-            double xForce = 0;
-            double yForce = 0;
+            double xVelocity = 0;
+            double yVelocity = 0;
 
             for(int i = 0; i<forces.size(); i++){
                 double[] forceComponents = calculateForceComponents(forces.get(i), forceDirections.get(i));
-                xForce += forceComponents[0];
-                yForce += forceComponents[1];;
+                xVelocity += forceComponents[0] * deltaTime;
+                yVelocity += forceComponents[1] * deltaTime;
             }
-            obstacle.addX((int) Math.round(xForce));
-            obstacle.addY((int) Math.round(yForce));
-            System.out.println(obstacle.getCoordinates());
+            double halfXVelocity = xVelocity /2;
+            double halfYVelocity = yVelocity /2;
+
+            obstacle.setVelocity(obstacle.getXVelocity() + halfXVelocity, obstacle.getYVelocity() + halfYVelocity);
+            obstacle.addX((obstacle.getXVelocity() + halfXVelocity) * deltaTime);
+            obstacle.addY((obstacle.getYVelocity() + halfYVelocity) * deltaTime);
+            obstacle.setVelocity(obstacle.getXVelocity() + halfXVelocity, obstacle.getYVelocity() + halfYVelocity);
+            System.out.println(obstacle.getCoordinates() + " - " + Math.round(obstacle.getXVelocity()) + ", " + Math.round(obstacle.getYVelocity()));
         }
     }
 

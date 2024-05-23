@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Box implements Obstacle{
-    private int x,y;
+    private Double x,y;
     private Color color;
     private int width, height;
     private Boolean fixed;
@@ -13,36 +13,38 @@ public class Box implements Obstacle{
     private Double xVelocity, yVelocity;
 
     public Box(int x, int y, int width, int height, Color color, Boolean fixed){
-        this.x = x;
-        this.y = y;
+        this.x = (double) x;
+        this.y = (double) y;
         this.width = width;
         this.height = height;
         this.fixed = fixed;
+        this.xVelocity = 0.0;
+        this.yVelocity = 0.0;
     }
 
 
     public void draw(Graphics g) {
         g.setColor(this.color);
-        g.fillRect(this.x, this.y, this.width, this.height);
+        g.fillRect((int) Math.round(this.x), (int) Math.round(this.y), this.width, this.height);
     }
 
-    public List<Integer> getCoordinates() {
-        List<Integer> coordinates = new ArrayList<>();
+    public List<Double> getCoordinates() {
+        List<Double> coordinates = new ArrayList<>();
         coordinates.add(x);
         coordinates.add(y);
         return coordinates;
     }
 
-    public void setCoordinates(int x, int y) {
+    public void setCoordinates(Double x, Double y) {
         this.x = x;
         this.y = y;
     }
 
-    public void addX(int x) {
+    public void addX(Double x) {
         this.x += x;
     }
 
-    public void addY(int y) {
+    public void addY(Double y) {
         this.y += y;
     }
 
@@ -54,11 +56,8 @@ public class Box implements Obstacle{
         return this.yVelocity;
     }
 
-    public void setXVelocity(Double xVelocity) {
+    public void setVelocity(Double xVelocity, Double yVelocity) {
         this.xVelocity = xVelocity;
-    }
-
-    public void setYVelocity(Double yVelocity) {
         this.yVelocity = yVelocity;
     }
 
