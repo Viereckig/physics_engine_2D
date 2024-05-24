@@ -27,7 +27,8 @@ public class PaintPanel extends JPanel {
 
         //--------------------Obstacles--------------------//
         addWall();
-        obstacles.add(new Box(100, 200, 50, 50, Color.BLUE, false));
+        obstacles.add(new Box(10, 20, 5, 5, Color.BLUE, false));
+        obstacles.add(new Box(40, 20, 5, 5, Color.RED, false));
 
         //-----------------------Thread---------------------//
         running = true;
@@ -47,10 +48,15 @@ public class PaintPanel extends JPanel {
     }
 
     private void addWall() {
-        obstacles.add(new Box(0, 0, this.getWidth(), 1, Color.BLACK, true)); // Obere Wand
-        obstacles.add(new Box(0, this.getHeight(), this.getWidth(), 1, Color.BLACK, true)); // Untere Wand
-        obstacles.add(new Box(0, 0, 1, this.getHeight(), Color.BLACK, true)); // Linke Wand
-        obstacles.add(new Box(this.getWidth(), 0, 1, this.getHeight(), Color.BLACK, true)); // Rechte Wand
+        int width = Frame.getWindow().getWidth()/10;
+        int height = Frame.getWindow().getHeight()/10;
+
+        System.out.println(width + " - " + height);
+
+        obstacles.add(new Box(0, 0, width, 1, Color.BLACK, true)); // Obere Wand
+        obstacles.add(new Box(0, height, width, 1, Color.BLACK, true)); // Untere Wand
+        obstacles.add(new Box(0, 0, 1, height, Color.BLACK, true)); // Linke Wand
+        obstacles.add(new Box(width, 0, 1, height, Color.BLACK, true)); // Rechte Wand
     }
 
     public static List<Obstacle> getObstacles() {

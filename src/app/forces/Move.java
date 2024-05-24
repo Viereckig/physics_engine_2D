@@ -13,7 +13,7 @@ public class Move {
     private static List<Double> forceDirections = new ArrayList<>();
 
     public void consistentForces(double deltaTime){
-        List<Obstacle> allObstacles =  PaintPanel.getObstacles();
+        List<Obstacle> allObstacles =  new ArrayList<>(PaintPanel.getObstacles());
         List<Obstacle> obstacles = allObstacles.stream()
                 .filter(obstacle -> !obstacle.isFixed()).toList();
 
@@ -32,10 +32,45 @@ public class Move {
             double halfYVelocity = yVelocity /2;
 
             obstacle.setVelocity(obstacle.getXVelocity() + halfXVelocity, obstacle.getYVelocity() + halfYVelocity);
-            obstacle.addX((obstacle.getXVelocity() + halfXVelocity) * deltaTime);
-            obstacle.addY((obstacle.getYVelocity() + halfYVelocity) * deltaTime);
+
+            Double xMove = (obstacle.getXVelocity() + halfXVelocity) * deltaTime;
+            Double yMove = (obstacle.getYVelocity() + halfYVelocity) * deltaTime;
+
+            obstacle.addX(xMove);
+            obstacle.addY(yMove);
+
+            for(Obstacle collidingObstacle : allObstacles){
+                if(collidingObstacle != obstacle){
+                    if(obstacle.isCollidingWithObstacle(collidingObstacle)){
+
+                        obstacle.addX(-xMove);
+                        if(obstacle.isCollidingWithObstacle(collidingObstacle)){
+                            obstacle.addX(xMove);
+                        } else {
+                            System.out.println("Colliding on x Axe");
+                            obstacle.setVelocity(0.0, obstacle.getYVelocity());
+                            xVelocity = 0.0;
+                            halfXVelocity = 0.0;
+
+                            obstacle.setCoordinates(collidingObstacle.getCoordinates().get(0) - obstacle.getSize().get(0) -1, obstacle.getCoordinates().get(1));
+                        }
+
+                        obstacle.addY(-yMove);
+                        if(obstacle.isCollidingWithObstacle(collidingObstacle)){
+                            obstacle.addY(yMove);
+                        } else {
+                            System.out.println("Colliding on y Axe");
+                            obstacle.setVelocity(obstacle.getXVelocity(), 0.0);
+                            yVelocity = 0.0;
+                            halfYVelocity = 0.0;
+
+                            obstacle.setCoordinates(obstacle.getCoordinates().get(0), collidingObstacle.getCoordinates().get(1) - obstacle.getSize().get(1) -1);
+                        }
+                    }
+                }
+            }
             obstacle.setVelocity(obstacle.getXVelocity() + halfXVelocity, obstacle.getYVelocity() + halfYVelocity);
-            System.out.println(obstacle.getCoordinates() + " - " + Math.round(obstacle.getXVelocity()) + ", " + Math.round(obstacle.getYVelocity()));
+            //System.out.println(obstacle.getCoordinates() + " - " + Math.round(obstacle.getXVelocity()) + ", " + Math.round(obstacle.getYVelocity()));
         }
     }
 

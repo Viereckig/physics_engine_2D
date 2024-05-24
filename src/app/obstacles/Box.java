@@ -1,5 +1,7 @@
 package app.obstacles;
 
+import app.Frame;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class Box implements Obstacle{
         this.width = width;
         this.height = height;
         this.fixed = fixed;
+        this.color = color;
         this.xVelocity = 0.0;
         this.yVelocity = 0.0;
     }
@@ -25,7 +28,7 @@ public class Box implements Obstacle{
 
     public void draw(Graphics g) {
         g.setColor(this.color);
-        g.fillRect((int) Math.round(this.x), (int) Math.round(this.y), this.width, this.height);
+        g.fillRect((int) Math.round(this.x * Frame.getMeterToPixel()), (int) Math.round(this.y * Frame.getMeterToPixel()), this.width * Frame.getMeterToPixel(), this.height * Frame.getMeterToPixel());
     }
 
     public List<Double> getCoordinates() {
@@ -33,6 +36,14 @@ public class Box implements Obstacle{
         coordinates.add(x);
         coordinates.add(y);
         return coordinates;
+    }
+
+
+    public List<Integer> getSize() {
+        List<Integer> size = new ArrayList<>();
+        size.add(width);
+        size.add(height);
+        return size;
     }
 
     public void setCoordinates(Double x, Double y) {
@@ -61,12 +72,27 @@ public class Box implements Obstacle{
         this.yVelocity = yVelocity;
     }
 
-
     public void setColor(Color color){
         this.color = color;
     }
 
     public Boolean isFixed() {
         return fixed;
+    }
+
+    public Boolean isCollidingWithObstacle(Obstacle obstacle) {
+        Double x,y;
+        int width, height;
+
+        x = obstacle.getCoordinates().get(0);
+        y = obstacle.getCoordinates().get(1);
+        width = obstacle.getSize().get(0);
+        height = obstacle.getSize().get(1);
+
+        return this.x < x + width
+                && this.x + this.width > x
+                && this.y < y + height
+                && this.y + this.height > y;
+
     }
 }
